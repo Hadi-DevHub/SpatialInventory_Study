@@ -3,6 +3,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InventoryPlugin.h"
+#include "Interaction/Inv_Highlightable.h"
 #include "Items/Components/Inv_ItemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/HUD/Inv_HUDWidget.h"
@@ -78,7 +79,12 @@ void AInv_PlayerController::TraceForItems()
 
 	if (ThisActor.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("started tracing an item!."));
+		UE_LOG(LogTemp, Warning, TEXT("started tracing an item!."))
+
+		if (UActorComponent* Highlightable = ThisActor->FindComponentByInterface(UInv_Highlightable::StaticClass()); IsValid(Highlightable))
+		{
+			IInv_Highlightable::Execute_Highlight(Highlightable);
+		}
 		
 		UInv_ItemComponent* ThisActorItemComponent = ThisActor->FindComponentByClass<UInv_ItemComponent>();
 		if (!IsValid(ThisActorItemComponent)) return;
@@ -90,7 +96,15 @@ void AInv_PlayerController::TraceForItems()
 		HUDWidget->HidePickupWidget();
 	}
 	
-	if (LastActor.IsValid()) UE_LOG(LogTemp, Warning, TEXT("stopped tracing an item!."))
+	if (LastActor.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("stopped tracing an item!."));
+		if (UActorComponent* Highlightable = LastActor->FindComponentByInterface(UInv_Highlightable::StaticClass()); IsValid(Highlightable))
+		{
+			IInv_Highlightable::Execute_UnHighlight(Highlightable);
+		}
+	}
+	
 
 }
 
