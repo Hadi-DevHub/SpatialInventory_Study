@@ -15,21 +15,45 @@ class INVENTORYPLUGIN_API AInv_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 protected:
-	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
 private:
 
+	//------------------//
+	//	 Item Tracing   //
+	//------------------//
+	
+	void TraceForItems();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Item Tracing")
+	float TraceDistance = 1000;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Item Tracing")
+	TEnumAsByte<ECollisionChannel> ItemTraceChannel = ECC_GameTraceChannel1;
+
+	TWeakObjectPtr<AActor> ThisActor;
+	TWeakObjectPtr<AActor> LastActor;
+
+	//------------//
+	//	 Inputs   //
+	//------------//
+	
 	UFUNCTION()
 	void PrimaryInteract();
-
-	void CreateHUDWidget();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Inputs")
 	TObjectPtr<UInputAction> PrimaryInteractAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Inputs")
 	TArray<TObjectPtr<UInputMappingContext>> DefaultIMCs;
+
+	//-------------//
+	//	 Widgets   //
+	//-------------//
+
+	void CreateHUDWidget();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Widgets")
 	TSubclassOf<UInv_HUDWidget> HUDWidgetClass;

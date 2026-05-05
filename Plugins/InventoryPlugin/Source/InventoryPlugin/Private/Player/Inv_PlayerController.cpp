@@ -3,7 +3,19 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InventoryPlugin.h"
+#include "Kismet/GameplayStatics.h"
 #include "Widgets/HUD/Inv_HUDWidget.h"
+
+void AInv_PlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	if (IsValid(EnhancedInputComponent))
+	{
+		EnhancedInputComponent->BindAction(PrimaryInteractAction, ETriggerEvent::Started, this, &ThisClass::PrimaryInteract);
+	}
+}
 
 void AInv_PlayerController::BeginPlay()
 {
@@ -20,15 +32,10 @@ void AInv_PlayerController::BeginPlay()
 	CreateHUDWidget();
 }
 
-void AInv_PlayerController::SetupInputComponent()
+void AInv_PlayerController::Tick(float DeltaTime)
 {
-	Super::SetupInputComponent();
-
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	if (IsValid(EnhancedInputComponent))
-	{
-		EnhancedInputComponent->BindAction(PrimaryInteractAction, ETriggerEvent::Started, this, &ThisClass::PrimaryInteract);
-	}
+	Super::Tick(DeltaTime);
+	TraceForItems();
 }
 
 void AInv_PlayerController::PrimaryInteract()
@@ -47,3 +54,29 @@ void AInv_PlayerController::CreateHUDWidget()
 		HUDWidget->AddToViewport();
 	}
 }
+
+void AInv_PlayerController::TraceForItems()
+{
+	if (!IsValid(GEngine)) return;
+	
+	FVector2D Viewport;
+	GEngine->GameViewport->GetViewportSize(Viewport);
+	FVector2D ViewportCenter = Viewport / 2.f;
+	
+	FVector TraceStart;
+	FVector Forward;
+	FHitResult HitResult;
+	if (!UGameplayStatics::DeprojectScreenToWorld(this, ViewportCenter, TraceStart, Forward)) return;
+	FVector End = TraceStart + Forward * TraceDistance;
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, End, ItemTraceChannel);
+
+	LastActor = ThisActor;
+	ThisActor = HitResult.GetActor();
+
+	if (ThisActor == LastActor) return;
+
+	if (ThisActor.IsValid()) UE_LOG(LogTemp, Log, TEXT("started tracing an item!."))
+	if (LastActor.IsValid()) UE_LOG(LogTemp, Log, TEXT("stopped tracing an item!."))
+
+}
+
