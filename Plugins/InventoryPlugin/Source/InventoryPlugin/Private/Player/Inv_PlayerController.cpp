@@ -3,6 +3,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InventoryPlugin.h"
+#include "Items/Components/Inv_ItemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/HUD/Inv_HUDWidget.h"
 
@@ -40,13 +41,13 @@ void AInv_PlayerController::Tick(float DeltaTime)
 
 void AInv_PlayerController::PrimaryInteract()
 {
-	UE_LOG(LogInventory, Log, TEXT("Primary Interact Called!"))
+	UE_LOG(LogInventory, Log, TEXT("primary interact called"))
 }
 
 void AInv_PlayerController::CreateHUDWidget()
 {
 	if (!IsLocalController()) return;
-	checkf(HUDWidgetClass, TEXT("Don't Forget To Set The HUD Class"));
+	checkf(HUDWidgetClass, TEXT("don't forget to set the HUD widget class!."));
 	
 	HUDWidget = CreateWidget<UInv_HUDWidget>(this, HUDWidgetClass);
 	if (IsValid(HUDWidget))
@@ -75,8 +76,21 @@ void AInv_PlayerController::TraceForItems()
 
 	if (ThisActor == LastActor) return;
 
-	if (ThisActor.IsValid()) UE_LOG(LogTemp, Log, TEXT("started tracing an item!."))
-	if (LastActor.IsValid()) UE_LOG(LogTemp, Log, TEXT("stopped tracing an item!."))
+	if (ThisActor.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("started tracing an item!."));
+		
+		UInv_ItemComponent* ThisActorItemComponent = ThisActor->FindComponentByClass<UInv_ItemComponent>();
+		if (!IsValid(ThisActorItemComponent)) return;
+		
+		if (IsValid(HUDWidget)) HUDWidget->ShowPickupWidget(ThisActorItemComponent->GetPickupMessage());
+	}
+	else
+	{
+		HUDWidget->HidePickupWidget();
+	}
+	
+	if (LastActor.IsValid()) UE_LOG(LogTemp, Warning, TEXT("stopped tracing an item!."))
 
 }
 
