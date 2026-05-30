@@ -16,6 +16,7 @@ class INVENTORYPLUGIN_API AInv_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void ToggleInventory();
 
 protected:
