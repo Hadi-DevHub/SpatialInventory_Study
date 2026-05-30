@@ -8,11 +8,15 @@ class UInv_HUDWidget;
 class UInputComponent;
 class UInputMappingContext;
 class UInputAction;
+class UInv_InventoryComponent;
 
 UCLASS()
 class INVENTORYPLUGIN_API AInv_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	void ToggleInventory();
 
 protected:
 	virtual void SetupInputComponent() override;
@@ -20,6 +24,8 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+
+	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 
 	//------------------//
 	//	 Item Tracing   //
@@ -45,6 +51,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Inputs")
 	TObjectPtr<UInputAction> PrimaryInteractAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Inputs")
+	TObjectPtr<UInputAction> ToggleAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Plugin | Inputs")
 	TArray<TObjectPtr<UInputMappingContext>> DefaultIMCs;

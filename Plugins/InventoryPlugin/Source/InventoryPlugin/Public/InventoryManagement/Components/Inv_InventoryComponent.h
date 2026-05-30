@@ -14,8 +14,14 @@ class INVENTORYPLUGIN_API UInv_InventoryComponent : public UActorComponent
 public:
 	UInv_InventoryComponent();
 
+	void ToggleInventoryMenu();
+
 protected:
 	virtual void BeginPlay() override;
+
+	void OpenInventoryMenu();
+	void CloseInventoryMenu();
+	bool bInventoryMenuOpen = false;
 
 private:
 

@@ -4,9 +4,16 @@
 #include "EnhancedInputSubsystems.h"
 #include "InventoryPlugin.h"
 #include "Interaction/Inv_Highlightable.h"
+#include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "Items/Components/Inv_ItemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/HUD/Inv_HUDWidget.h"
+
+void AInv_PlayerController::ToggleInventory()
+{
+	if (!InventoryComponent.IsValid()) return;
+	InventoryComponent->ToggleInventoryMenu();
+}
 
 void AInv_PlayerController::SetupInputComponent()
 {
@@ -16,6 +23,7 @@ void AInv_PlayerController::SetupInputComponent()
 	if (IsValid(EnhancedInputComponent))
 	{
 		EnhancedInputComponent->BindAction(PrimaryInteractAction, ETriggerEvent::Started, this, &ThisClass::PrimaryInteract);
+		EnhancedInputComponent->BindAction(ToggleAction, ETriggerEvent::Started, this, &ThisClass::ToggleInventory);
 	}
 }
 
@@ -31,6 +39,7 @@ void AInv_PlayerController::BeginPlay()
 			Subsystem->AddMappingContext(Context, 0);
 		}
 	}
+	InventoryComponent = FindComponentByClass<UInv_InventoryComponent>();
 	CreateHUDWidget();
 }
 
@@ -104,7 +113,5 @@ void AInv_PlayerController::TraceForItems()
 			IInv_Highlightable::Execute_UnHighlight(Highlightable);
 		}
 	}
-	
-
 }
 
