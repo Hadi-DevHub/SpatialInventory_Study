@@ -1,0 +1,15 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "WidgetUtils.generated.h"
+
+UCLASS()
+class INVENTORYPLUGIN_API UWidgetUtils : public UBlueprintFunctionLibrary
+{
+	GENERATED_BODY()
+
+public:
+
+	static int32 GetIndexFromPosition(const FIntPoint& Position, const int32 Columns);
+};
