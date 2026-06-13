@@ -4,9 +4,11 @@
 #include "Components/ActorComponent.h"
 #include "Inv_InventoryComponent.generated.h"
 
+class UInv_ItemComponent;
 class UInv_UW_InventoryBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemChange, UInv_InventoryItem*, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNoRoomInInventory);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class INVENTORYPLUGIN_API UInv_InventoryComponent : public UActorComponent
@@ -20,6 +22,10 @@ public:
 
 	FInventoryItemChange OnItemAdded;
 	FInventoryItemChange OnItemRemoved;
+	FOnNoRoomInInventory OnNoRoomInInventory;
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "INV PLUGIN")
+	void TryAddItem(UInv_ItemComponent* InItemComponent);
 
 protected:
 	virtual void BeginPlay() override;

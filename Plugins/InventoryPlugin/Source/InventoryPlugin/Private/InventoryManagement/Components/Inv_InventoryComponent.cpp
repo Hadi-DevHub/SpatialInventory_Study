@@ -19,6 +19,11 @@ void UInv_InventoryComponent::ToggleInventoryMenu()
 	}
 }
 
+void UInv_InventoryComponent::TryAddItem(UInv_ItemComponent* InItemComponent)
+{
+	OnNoRoomInInventory.Broadcast();
+}
+
 void UInv_InventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();

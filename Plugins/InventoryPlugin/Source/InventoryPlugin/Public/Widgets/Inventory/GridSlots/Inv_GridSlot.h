@@ -16,7 +16,7 @@ public:
 	void SetTileIndex(int32 InTileIndex) { TileIndex = InTileIndex; };
 
 private:
-	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+	UPROPERTY(EditAnywhere, Category = "INV PLUGIN", Meta = (BindWidget))
 	TObjectPtr<UImage> Image_GridSlot;
 
 	int32 TileIndex;
