@@ -37,7 +37,7 @@ public:
 
 	/** Fast Array Serializer Contract */
 	void PreReplicatedRemove(const TArrayView<int32> RemovedIndices, int32 FinalSize);
-	void PostReplicatedRemove(const TArrayView<int32> AddedIndices, int32 FinalSize);
+	void PostReplicatedAdd(const TArrayView<int32> AddedIndices, int32 FinalSize);
 	/** End of Fast Array Serializer Contract */
 
 	bool NetDeltaSerialize(FNetDeltaSerializeInfo& DeltaParams)
