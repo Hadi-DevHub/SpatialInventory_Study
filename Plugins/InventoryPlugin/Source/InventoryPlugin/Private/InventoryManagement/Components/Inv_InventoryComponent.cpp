@@ -1,6 +1,7 @@
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "Widgets/Inventory/InventoryBase/Inv_UW_InventoryBase.h"
 #include "Blueprint/UserWidget.h"
+#include "Types/Inv_GridTypes.h"
 
 UInv_InventoryComponent::UInv_InventoryComponent()
 {
@@ -21,7 +22,12 @@ void UInv_InventoryComponent::ToggleInventoryMenu()
 
 void UInv_InventoryComponent::TryAddItem(UInv_ItemComponent* InItemComponent)
 {
-	OnNoRoomInInventory.Broadcast();
+	FInv_SlotAvailabilityResult Result = InventoryWidget->HasRoomForItem(InItemComponent);
+
+	if (Result.TotalRoomToFill == 0)
+	{
+		OnNoRoomInInventory.Broadcast();
+	}
 }
 
 void UInv_InventoryComponent::BeginPlay()

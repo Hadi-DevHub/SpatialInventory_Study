@@ -17,6 +17,10 @@ public:
 
 	void NativeOnInitialized() override;
 	void NativeConstruct() override;
+
+protected:
+
+	virtual FInv_SlotAvailabilityResult HasRoomForItem(UInv_ItemComponent* ItemComponent) const override;
 	
 private:
 

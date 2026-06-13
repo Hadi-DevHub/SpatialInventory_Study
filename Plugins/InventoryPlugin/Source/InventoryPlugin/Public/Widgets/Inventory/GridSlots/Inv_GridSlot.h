@@ -21,3 +21,5 @@ private:
 
 	int32 TileIndex;
 };
+
+
