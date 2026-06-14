@@ -27,6 +27,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "INV PLUGIN")
 	void TryAddItem(UInv_ItemComponent* InItemComponent);
 
+	UFUNCTION(Server, Reliable)
+	void Server_AddNewItem(UInv_ItemComponent* InItem, int32 StackCount);
+	
+	UFUNCTION(Server, Reliable)
+	void Server_AddStacksToItem(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder);
+
 protected:
 	virtual void BeginPlay() override;
 

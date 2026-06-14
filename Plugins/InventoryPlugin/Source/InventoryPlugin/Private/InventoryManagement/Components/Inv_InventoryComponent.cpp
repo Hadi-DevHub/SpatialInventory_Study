@@ -28,6 +28,28 @@ void UInv_InventoryComponent::TryAddItem(UInv_ItemComponent* InItemComponent)
 	{
 		OnNoRoomInInventory.Broadcast();
 	}
+
+	if (Result.Item.IsValid() && Result.bStackable)
+	{
+		// Add stacks to an item that already exist in the inventory. We only want to update the stack count,
+		// not create a new item of this type
+		Server_AddStacksToItem(InItemComponent, Result.TotalRoomToFill, Result.Remainder);
+	}
+	if (Result.TotalRoomToFill > 0)
+	{
+		// this item doesn't exist in the inventory, create a new one and update all pertinent slots.
+		Server_AddNewItem(InItemComponent, Result.bStackable ? Result.TotalRoomToFill : 0);
+	}
+}
+
+void UInv_InventoryComponent::Server_AddNewItem_Implementation(UInv_ItemComponent* InItem, int32 StackCount)
+{
+	
+}
+
+void UInv_InventoryComponent::Server_AddStacksToItem_Implementation(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder)
+{
+	
 }
 
 void UInv_InventoryComponent::BeginPlay()
