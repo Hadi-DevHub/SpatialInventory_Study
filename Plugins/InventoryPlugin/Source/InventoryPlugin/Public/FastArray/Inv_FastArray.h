@@ -45,8 +45,8 @@ public:
 		return FastArrayDeltaSerialize<FInv_InventoryEntry, FInv_InventoryFastArray>(Entries, DeltaParams, *this);
 	}
 
-	void AddEntry(UInv_InventoryItem* InEntry);
-	void AddEntry(UInv_ItemComponent* InItemComponent);
+	UInv_InventoryItem* AddEntry(UInv_InventoryItem* InEntry);
+	UInv_InventoryItem* AddEntry(UInv_ItemComponent* InItemComponent);
 	void RemoveEntry(UInv_InventoryItem* InEntry);
 	
 private:

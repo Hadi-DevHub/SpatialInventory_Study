@@ -26,7 +26,8 @@ public class InventoryPlugin : ModuleRules
 			new string[]
 			{
 				"Core",
-				"NetCore"
+				"NetCore",
+				"StructUtils",
 			}
 			);
 			

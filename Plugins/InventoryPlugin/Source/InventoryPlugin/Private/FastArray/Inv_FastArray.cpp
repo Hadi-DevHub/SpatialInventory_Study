@@ -2,6 +2,7 @@
 
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "Items/Inv_InventoryItem.h"
+#include "Items/Components/Inv_ItemComponent.h"
 
 TArray<UInv_InventoryItem*> FInv_InventoryFastArray::GetAllItems() const
 {
@@ -38,7 +39,7 @@ void FInv_InventoryFastArray::PostReplicatedAdd(const TArrayView<int32> AddedInd
 	}
 }
 
-void FInv_InventoryFastArray::AddEntry(UInv_InventoryItem* InEntry)
+UInv_InventoryItem* FInv_InventoryFastArray::AddEntry(UInv_InventoryItem* InEntry)
 {
 	check(OwnerComponent);
 	AActor* Actor = OwnerComponent->GetOwner();
@@ -48,11 +49,26 @@ void FInv_InventoryFastArray::AddEntry(UInv_InventoryItem* InEntry)
 	NewEntry.Item = InEntry;
 
 	MarkItemDirty(NewEntry);
+
+	return InEntry;
 }
 
-void FInv_InventoryFastArray::AddEntry(UInv_ItemComponent* InItemComponent)
+UInv_InventoryItem* FInv_InventoryFastArray::AddEntry(UInv_ItemComponent* InItemComponent)
 {
-	return;
+	check(OwnerComponent);
+	AActor* OwnerActor = OwnerComponent->GetOwner();
+	check(OwnerActor->HasAuthority());
+
+	UInv_InventoryComponent* IC = Cast<UInv_InventoryComponent>(OwnerComponent);
+	if (!IsValid(IC)) return nullptr;
+
+	FInv_InventoryEntry& NewEntry = Entries.AddDefaulted_GetRef();
+	NewEntry.Item = InItemComponent->GetItemManifest().Manifest(OwnerActor);
+
+	IC->AddRepSubObj(NewEntry.Item);
+	MarkItemDirty(NewEntry);
+
+	return NewEntry.Item;
 }
 
 void FInv_InventoryFastArray::RemoveEntry(UInv_InventoryItem* InEntry)
