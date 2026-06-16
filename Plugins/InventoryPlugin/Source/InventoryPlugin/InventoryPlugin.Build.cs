@@ -28,6 +28,7 @@ public class InventoryPlugin : ModuleRules
 				"Core",
 				"NetCore",
 				"StructUtils",
+				"GameplayTags"
 			}
 			);
 			

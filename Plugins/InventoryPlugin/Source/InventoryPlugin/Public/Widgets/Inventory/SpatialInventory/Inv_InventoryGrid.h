@@ -5,6 +5,8 @@
 #include "Types/Inv_GridTypes.h"
 #include "Inv_InventoryGrid.generated.h"
 
+struct FInv_ItemManifest;
+class UInv_InventoryComponent;
 class UCanvasPanel;
 class UInv_GridSlot;
 class UImage;
@@ -19,8 +21,12 @@ public:
 	EInv_ItemCategory GetCategoryType() const { return ItemCategory; }
 	
 	void NativeOnInitialized() override;
-	
+
+	UFUNCTION()
+	void AddItem(UInv_InventoryItem* Item);
 private:
+
+	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 
 	void ConstructGrid();
 
@@ -44,5 +50,7 @@ private:
 
 	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
 	float TileSize;
+
+	bool MatchesCategory(const UInv_InventoryItem* Item) const;
 
 };

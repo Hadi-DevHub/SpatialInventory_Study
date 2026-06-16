@@ -25,7 +25,6 @@ void FInv_InventoryFastArray::PreReplicatedRemove(const TArrayView<int32> Remove
 	{
 		IC->OnItemRemoved.Broadcast(Entries[Index].Item);
 	}
-		
 }
 
 void FInv_InventoryFastArray::PostReplicatedAdd(const TArrayView<int32> AddedIndices, int32 FinalSize)

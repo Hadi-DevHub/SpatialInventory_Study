@@ -60,8 +60,6 @@ private:
 
 };
 
-
-
 template<>
 struct TStructOpsTypeTraits<FInv_InventoryFastArray> : public TStructOpsTypeTraitsBase2<FInv_InventoryFastArray>
 {

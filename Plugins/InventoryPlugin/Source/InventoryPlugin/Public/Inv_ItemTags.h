@@ -1,7 +1,6 @@
 #pragma once
 #include "NativeGameplayTags.h"
 
-
 namespace GameItems
 {
 	namespace Equipment
