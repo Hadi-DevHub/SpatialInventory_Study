@@ -6,6 +6,7 @@
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "InventoryManagement/InventoryStatics/InventoryStatics.h"
 #include "Items/Inv_InventoryItem.h"
+#include "Items/Components/Inv_ItemComponent.h"
 #include "Utils/WidgetUtils.h"
 
 void UInv_InventoryGrid::NativeOnInitialized()
@@ -22,6 +23,23 @@ void UInv_InventoryGrid::AddItem(UInv_InventoryItem* Item)
 	if (!MatchesCategory(Item)) return;
 
 	UE_LOG(LogTemp, Display, TEXT("InventoryGrid::AddItem"));
+}
+
+FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(UInv_ItemComponent* InItemComponent)
+{
+	return HasRoomForItem(InItemComponent->GetItemManifest());
+}
+
+FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(UInv_InventoryItem* InItem)
+{
+	return HasRoomForItem(InItem->GetItemManifest());
+}
+
+FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemManifest& InItemManifest)
+{
+	FInv_SlotAvailabilityResult Result;
+	Result.TotalRoomToFill = 1;
+	return Result;
 }
 
 void UInv_InventoryGrid::ConstructGrid()

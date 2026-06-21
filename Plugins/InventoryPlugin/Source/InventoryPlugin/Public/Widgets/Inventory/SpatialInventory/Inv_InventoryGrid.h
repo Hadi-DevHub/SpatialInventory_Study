@@ -5,6 +5,7 @@
 #include "Types/Inv_GridTypes.h"
 #include "Inv_InventoryGrid.generated.h"
 
+class UInv_ItemComponent;
 struct FInv_ItemManifest;
 class UInv_InventoryComponent;
 class UCanvasPanel;
@@ -24,7 +25,13 @@ public:
 
 	UFUNCTION()
 	void AddItem(UInv_InventoryItem* Item);
+
+	FInv_SlotAvailabilityResult HasRoomForItem(UInv_ItemComponent* InItemComponent);
+	FInv_SlotAvailabilityResult HasRoomForItem(UInv_InventoryItem* InItem);
+	
 private:
+
+	FInv_SlotAvailabilityResult HasRoomForItem(const FInv_ItemManifest& InItemManifest);
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 

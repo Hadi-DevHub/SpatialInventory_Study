@@ -4,6 +4,8 @@
 
 #include "Inv_ItemFragment.generated.h"
 
+class UImage;
+
 USTRUCT(BlueprintType)
 struct FInv_ItemFragment 
 {
@@ -44,4 +46,20 @@ private:
 	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
 	float GridPadding = 0.f;
 	
+};
+
+USTRUCT(BlueprintType)
+struct FInv_IconFragment : public FInv_ItemFragment
+{
+	GENERATED_BODY()
+
+	UImage* GetIcon() const { return ItemIcon; }
+	
+private:
+
+	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+	TObjectPtr<UImage> ItemIcon{ nullptr };
+
+	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+	FVector2D IconSize{44.f,44.f};
 };

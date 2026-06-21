@@ -4,6 +4,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "WidgetUtils.generated.h"
 
+class UInv_ItemComponent;
+
 UCLASS()
 class INVENTORYPLUGIN_API UWidgetUtils : public UBlueprintFunctionLibrary
 {
