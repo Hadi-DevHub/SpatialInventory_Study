@@ -4,6 +4,7 @@
 #include "StructUtils/InstancedStruct.h"
 #include "Inv_ItemManifest.generated.h"
 
+struct FInv_ItemFragment;
 class UInv_InventoryItem;
 
 USTRUCT(BlueprintType)
@@ -20,6 +21,9 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
     EInv_ItemCategory ItemCategory = EInv_ItemCategory::None;
+
+    UPROPERTY(EditAnywhere, Category = "INV PLUGIN", meta = (ExcludeBaseStruct))
+    TArray<TInstancedStruct<FInv_ItemFragment>> Fragments;
     
 };
 
