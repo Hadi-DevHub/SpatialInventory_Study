@@ -1,5 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Types/Inv_GridTypes.h"
 #include "StructUtils/InstancedStruct.h"
 #include "Inv_ItemManifest.generated.h"
@@ -17,6 +18,9 @@ public:
     UInv_InventoryItem* Manifest(UObject* NewOuter);
     EInv_ItemCategory GetItemCategory() const { return ItemCategory; };
 
+    template <typename T> requires std::derived_from<T, FInv_ItemManifest>
+    const T* GetFragmentOfTypeWithTag(const FGameplayTag& FragmentTag) const;
+
 private:
 
     UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
@@ -27,3 +31,16 @@ private:
     
 };
 
+template <typename T> 
+requires std::derived_from<T, FInv_ItemManifest>
+const T* FInv_ItemManifest::GetFragmentOfTypeWithTag(const FGameplayTag& FragmentTag) const
+{
+    for (const TInstancedStruct<FInv_ItemFragment>& Fragment : Fragments)
+    {
+        const T* FragmentPtr = Fragment.GetPtr<T>();
+        if (!FragmentPtr->GetFragmentTag().MatchesTagExact(FragmentTag)) continue;
+
+        return FragmentPtr;
+    }
+    return nullptr;
+}

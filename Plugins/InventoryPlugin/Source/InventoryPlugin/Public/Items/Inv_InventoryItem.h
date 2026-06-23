@@ -1,6 +1,12 @@
 #pragma once
 
+
+
+
+
+
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "StructUtils/InstancedStruct.h"
 #include "UObject/Object.h"
 #include "Manifest/Inv_ItemManifest.h"
@@ -30,6 +36,12 @@ private:
 	FInstancedStruct ItemManifest;
 };
 
+template <typename FragmentType>
+const FragmentType* GetFragment(const UInv_InventoryItem* Item, const FGameplayTag& FragmentTag)
+{
+	FInv_ItemManifest ItemManifest = Item->GetItemManifest();
+	return ItemManifest.GetFragmentOfTypeWithTag<FragmentType>(FragmentTag);
+}
 
 
 
