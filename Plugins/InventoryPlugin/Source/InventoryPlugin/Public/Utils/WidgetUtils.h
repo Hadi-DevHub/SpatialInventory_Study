@@ -14,4 +14,5 @@ class INVENTORYPLUGIN_API UWidgetUtils : public UBlueprintFunctionLibrary
 public:
 
 	static int32 GetIndexFromPosition(const FIntPoint& Position, const int32 Columns);
+	static FIntPoint GetPosFromIndex(int32 Index, const int32 Columns);
 };

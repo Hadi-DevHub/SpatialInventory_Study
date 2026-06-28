@@ -18,7 +18,7 @@ public:
     UInv_InventoryItem* Manifest(UObject* NewOuter);
     EInv_ItemCategory GetItemCategory() const { return ItemCategory; };
 
-    template <typename T> requires std::derived_from<T, FInv_ItemManifest>
+    template<typename T> requires std::derived_from<T, FInv_ItemFragment>
     const T* GetFragmentOfTypeWithTag(const FGameplayTag& FragmentTag) const;
 
 private:
@@ -32,7 +32,7 @@ private:
 };
 
 template <typename T> 
-requires std::derived_from<T, FInv_ItemManifest>
+requires std::derived_from<T, FInv_ItemFragment>
 const T* FInv_ItemManifest::GetFragmentOfTypeWithTag(const FGameplayTag& FragmentTag) const
 {
     for (const TInstancedStruct<FInv_ItemFragment>& Fragment : Fragments)

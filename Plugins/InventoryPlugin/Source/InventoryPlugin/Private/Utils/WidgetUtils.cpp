@@ -4,3 +4,9 @@ int32 UWidgetUtils::GetIndexFromPosition(const FIntPoint& Position, const int32 
 {
 	return Position.Y + Columns * Position.X;
 }
+
+FIntPoint UWidgetUtils::GetPosFromIndex(int32 Index, int32 Columns)
+{
+	int32 Remainder = Index % Columns;
+	return FIntPoint(FMath::DivideAndRoundDown(Index, Columns), Remainder);
+}

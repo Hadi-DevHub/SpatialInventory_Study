@@ -2,9 +2,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Fragments/Inv_ItemFragment.h"
 #include "Types/Inv_GridTypes.h"
 #include "Inv_InventoryGrid.generated.h"
 
+struct FInv_IconFragment;
+struct FInv_GridFragment;
+class UInv_SlottedItem;
 class UInv_ItemComponent;
 struct FInv_ItemManifest;
 class UInv_InventoryComponent;
@@ -32,6 +36,10 @@ public:
 private:
 
 	void AddItemToIndices(const FInv_SlotAvailabilityResult& Result, UInv_InventoryItem* NewItem);
+	void AddItemAtIndex(UInv_InventoryItem* _Item, const int32 _Index, const bool _bStackable, const int32 _StackAmount);
+	UInv_SlottedItem* CreateSlottedItem(UInv_InventoryItem* _Item, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment, const int32 _Index, const bool _bStackable, const int32 StackAmount) const;
+	FVector2D GetDrawSize(const FInv_GridFragment* _GridFragment) const;
+	void SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment) const;
 
 	FInv_SlotAvailabilityResult HasRoomForItem(const FInv_ItemManifest& InItemManifest);
 
@@ -44,6 +52,9 @@ private:
 
 	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
 	TSubclassOf<UInv_GridSlot> GridSlotClass;
+
+	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
+	TSubclassOf<UInv_SlottedItem> SlottedItemClass;
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UCanvasPanel> CanvasPanel;
