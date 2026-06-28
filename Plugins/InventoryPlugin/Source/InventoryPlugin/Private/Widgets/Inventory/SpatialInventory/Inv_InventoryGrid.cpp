@@ -42,7 +42,7 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(UInv_InventoryIte
 
 void UInv_InventoryGrid::AddItemToIndices(const FInv_SlotAvailabilityResult& Result, UInv_InventoryItem* NewItem)
 {
-	for (const FInv_SlotAvailability& Availability : Result)
+	for (const FInv_SlotAvailability& Availability : Result.SlotAvailabilities)
 	{
 		AddItemAtIndex(NewItem, Availability.Index, Result.bStackable, Availability.AmountToFill);
 	}
@@ -56,6 +56,10 @@ void UInv_InventoryGrid::AddItemAtIndex(UInv_InventoryItem* _Item, const int32 _
 	if (!GridFragment || !IconFragment) return;
 
 	UInv_SlottedItem* SlottedItem = CreateSlottedItem(_Item, GridFragment, IconFragment, _Index, _bStackable, _StackAmount);
+	AddSlottedItemToCanvas(SlottedItem, GridFragment, _Index);
+
+	SlottedItems.Add(_Index, SlottedItem);
+	
 }
 
 UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Item, const FInv_GridFragment* _GridFragment,
@@ -67,6 +71,17 @@ UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Ite
 	SetSlottedItemImage(SlottedItem, _GridFragment, _IconFragment);
 	
 	return SlottedItem;
+}
+
+void UInv_InventoryGrid::AddSlottedItemToCanvas(UInv_SlottedItem* SlottedItem, const FInv_GridFragment* _GridFragment,
+	const int32 _Index)
+{
+	CanvasPanel->AddChild(SlottedItem);
+	UCanvasPanelSlot* CPS = CanvasPanel->AddChildToCanvas(SlottedItem);
+	CPS->SetSize(GetDrawSize(_GridFragment));
+	const FVector2D DrawPos = UWidgetUtils::GetPosFromIndex(_Index, Columns) * TileSize;
+	const FVector2D DrawPosWithPadding = DrawPos + FVector2D(_GridFragment->GetGridPadding());
+	CPS->SetPosition(DrawPosWithPadding);
 }
 
 FVector2D UInv_InventoryGrid::GetDrawSize(const FInv_GridFragment* _GridFragment) const 

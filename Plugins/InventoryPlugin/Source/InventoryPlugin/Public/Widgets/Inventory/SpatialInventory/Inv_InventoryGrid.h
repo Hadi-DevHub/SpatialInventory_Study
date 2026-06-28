@@ -36,8 +36,17 @@ public:
 private:
 
 	void AddItemToIndices(const FInv_SlotAvailabilityResult& Result, UInv_InventoryItem* NewItem);
+	
 	void AddItemAtIndex(UInv_InventoryItem* _Item, const int32 _Index, const bool _bStackable, const int32 _StackAmount);
-	UInv_SlottedItem* CreateSlottedItem(UInv_InventoryItem* _Item, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment, const int32 _Index, const bool _bStackable, const int32 StackAmount) const;
+	UInv_SlottedItem* CreateSlottedItem(UInv_InventoryItem* _Item,
+		const FInv_GridFragment* _GridFragment,
+		const FInv_IconFragment* _IconFragment,
+		const int32 _Index,
+		const bool _bStackable,
+		const int32 StackAmount) const;
+
+	void AddSlottedItemToCanvas(UInv_SlottedItem* SlottedItem, const FInv_GridFragment* _GridFragment, const int32 _Index);
+	
 	FVector2D GetDrawSize(const FInv_GridFragment* _GridFragment) const;
 	void SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment) const;
 
@@ -53,6 +62,8 @@ private:
 	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
 	TSubclassOf<UInv_GridSlot> GridSlotClass;
 
+	TMap<int32, UInv_SlottedItem*> SlottedItems;
+	
 	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
 	TSubclassOf<UInv_SlottedItem> SlottedItemClass;
 	

@@ -53,12 +53,12 @@ struct FInv_IconFragment : public FInv_ItemFragment
 {
 	GENERATED_BODY()
 
-	UImage* GetIcon() const { return ItemIcon; }
+	UTexture2D* GetIcon() const { return ItemIcon; }
 	
 private:
 
 	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
-	TObjectPtr<UImage> ItemIcon{ nullptr };
+	TObjectPtr<UTexture2D> ItemIcon{ nullptr };
 
 	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
 	FVector2D IconSize{44.f,44.f};

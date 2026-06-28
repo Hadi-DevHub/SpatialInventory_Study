@@ -32,7 +32,7 @@ private:
 template <typename FragmentType>
 const FragmentType* GetFragment(const UInv_InventoryItem* Item, const FGameplayTag& FragmentTag)
 {
-	FInv_ItemManifest ItemManifest = Item->GetItemManifest();
+	const FInv_ItemManifest& ItemManifest = Item->GetItemManifest();
 	return ItemManifest.GetFragmentOfTypeWithTag<FragmentType>(FragmentTag);
 }
 
