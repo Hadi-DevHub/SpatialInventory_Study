@@ -7,18 +7,19 @@
 #include "Fragments/Inv_FragmentTag.h"
 #include "Fragments/Inv_ItemFragment.h"
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
-#include "InventoryManagement/InventoryStatics/InventoryStatics.h"
+#include "InventoryManagement/InventoryStatics/UInv_InventoryStatics.h"
 #include "Items/Inv_InventoryItem.h"
 #include "Items/Components/Inv_ItemComponent.h"
 #include "Utils/WidgetUtils.h"
 #include "Widgets/Inventory/SlottedItem/Inv_SlottedItem.h"
+#include "InventoryManagement/InventoryStatics/UInv_InventoryStatics.h"
 
 void UInv_InventoryGrid::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
 	ConstructGrid();
-	InventoryComponent = UInventoryStatics::GetInventoryComponent(GetOwningPlayer());
+	InventoryComponent = UInv_InventoryStatics::GetInventoryComponent(GetOwningPlayer());
 	InventoryComponent->OnItemAdded.AddDynamic(this, &ThisClass::AddItem);
 }
 
@@ -87,10 +88,12 @@ void UInv_InventoryGrid::AddSlottedItemToCanvas(UInv_SlottedItem* SlottedItem, c
 
 void UInv_InventoryGrid::UpdateGridSlots(UInv_InventoryItem* Item, const int32 Index)
 {
-	check(GridSlots.IsValidIndex(Index));
-
-	UInv_GridSlot* GridSlot = GridSlots[Index];
-	GridSlot->SetSlotToOccupied();
+	const FInv_GridFragment* GridFragment = GetFragment<FInv_GridFragment>(Item, FragmentTags::GridFragment);
+	FIntPoint ItemDimensions = GridFragment->GetGridSize();
+	UInv_InventoryStatics::ForEach2D(Index, Columns, ItemDimensions, GridSlots, [this](UInv_GridSlot* GridSlot)
+	{
+		GridSlot->SetSlotToOccupied();
+	});
 }
 
 FVector2D UInv_InventoryGrid::GetDrawSize(const FInv_GridFragment* _GridFragment) const 

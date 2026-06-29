@@ -4,7 +4,7 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Types/Inv_GridTypes.h"
-#include "InventoryManagement/InventoryStatics/InventoryStatics.h"
+#include "InventoryManagement/InventoryStatics/UInv_InventoryStatics.h"
 
 void UInv_SpatialInventory::NativeOnInitialized()
 {
@@ -23,7 +23,7 @@ void UInv_SpatialInventory::NativeConstruct()
 
 FInv_SlotAvailabilityResult UInv_SpatialInventory::HasRoomForItem(UInv_ItemComponent* ItemComponent) const
 {
-	switch (UInventoryStatics::GetItemCategoryFromItemComp(ItemComponent))
+	switch (UInv_InventoryStatics::GetItemCategoryFromItemComp(ItemComponent))
 	{
 	case EInv_ItemCategory::Consumable :
 		{
