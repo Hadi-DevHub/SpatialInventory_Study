@@ -4,4 +4,5 @@ namespace FragmentTags
 {
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GridFragment, "FragmentTags.GridFragment", "Grid size of this item.");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(IconFragment, "FragmentTags.IconFragment", "Visual representation of this item.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(StackableFragment, "FragmentTags.StackableFragment", "Defines the max stack of an item, and also how many it holds.");
 }

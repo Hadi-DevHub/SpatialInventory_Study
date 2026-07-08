@@ -63,3 +63,23 @@ private:
 	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
 	FVector2D IconSize{44.f,44.f};
 };
+
+USTRUCT()
+struct FInv_StackableFragment : public FInv_ItemFragment
+{
+	GENERATED_BODY()
+
+
+public:
+	
+	int32 GetMaxStackSize() const { return MaxStackSize; }
+	int32 GetStackCount() const { return StackCount; }
+	
+private:
+
+	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+	int32 MaxStackSize{1};
+	
+	UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+	int32 StackCount{1};
+};
