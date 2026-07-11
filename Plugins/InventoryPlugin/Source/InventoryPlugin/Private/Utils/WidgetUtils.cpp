@@ -2,11 +2,11 @@
 
 int32 UWidgetUtils::GetIndexFromPosition(const FIntPoint& Position, const int32 Columns)
 {
-	return Position.Y + Columns * Position.X;
+	return Position.X + Columns * Position.Y;
 }
 
 FIntPoint UWidgetUtils::GetPosFromIndex(int32 Index, int32 Columns)
 {
 	int32 Remainder = Index % Columns;
-	return FIntPoint(FMath::DivideAndRoundDown(Index, Columns), Remainder);
+	return FIntPoint(Index % Columns, Index / Columns);
 }

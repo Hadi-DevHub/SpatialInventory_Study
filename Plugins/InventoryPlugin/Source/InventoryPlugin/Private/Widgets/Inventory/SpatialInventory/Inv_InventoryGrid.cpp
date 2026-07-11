@@ -59,9 +59,7 @@ void UInv_InventoryGrid::AddItemAtIndex(UInv_InventoryItem* _Item, const int32 _
 
 	UInv_SlottedItem* SlottedItem = CreateSlottedItem(_Item, GridFragment, IconFragment, _Index, _bStackable, _StackAmount);
 	AddSlottedItemToCanvas(SlottedItem, GridFragment, _Index);
-
 	SlottedItems.Add(_Index, SlottedItem);
-	
 }
 
 UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Item, const FInv_GridFragment* _GridFragment,
@@ -71,6 +69,9 @@ UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Ite
 	SlottedItem->SetSlottedItemIndex(_Index);
 	SlottedItem->SetSlottedItemInventoryItemData(_Item);
 	SetSlottedItemImage(SlottedItem, _GridFragment, _IconFragment);
+	SlottedItem->SetIsStackable(_bStackable);
+	const int32 StackAmount = _bStackable ? _StackAmount : 0;
+	SlottedItem->UpdateStackCount(_StackAmount);
 	
 	return SlottedItem;
 }
@@ -115,12 +116,28 @@ void UInv_InventoryGrid::SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, con
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemManifest& InItemManifest)
 {
 	FInv_SlotAvailabilityResult Result;
-	Result.TotalRoomToFill = 1;
+	Result.TotalRoomToFill = 9;
+	Result.bStackable = true;
+
+	FInv_SlotAvailability SlotAvailability;
+	SlotAvailability.AmountToFill = 2;
+	SlotAvailability.Index = 0;
+	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability));
+
+	FInv_SlotAvailability SlotAvailability2;
+	SlotAvailability2.AmountToFill = 5;
+	SlotAvailability2.Index = 1;
+	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability2));
 	
-	FInv_SlotAvailability InSlot;
-	InSlot.AmountToFill = 1;
-	InSlot.Index = 0;
-	Result.SlotAvailabilities.Add(MoveTemp(InSlot));
+	FInv_SlotAvailability SlotAvailability3;
+	SlotAvailability3.AmountToFill = 2;
+	SlotAvailability3.Index = 2;
+	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability3));
+	
+	FInv_SlotAvailability SlotAvailability4;
+	SlotAvailability4.AmountToFill = 2;
+	SlotAvailability4.Index = 3;
+	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability4));
 	
 	return Result;
 }
