@@ -125,28 +125,23 @@ void UInv_InventoryGrid::SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, con
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemManifest& InItemManifest)
 {
 	FInv_SlotAvailabilityResult Result;
-	Result.TotalRoomToFill = 9;
-	Result.bStackable = true;
-
-	FInv_SlotAvailability SlotAvailability;
-	SlotAvailability.AmountToFill = 2;
-	SlotAvailability.Index = 0;
-	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability));
-
-	FInv_SlotAvailability SlotAvailability2;
-	SlotAvailability2.AmountToFill = 5;
-	SlotAvailability2.Index = 1;
-	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability2));
 	
-	FInv_SlotAvailability SlotAvailability3;
-	SlotAvailability3.AmountToFill = 2;
-	SlotAvailability3.Index = 2;
-	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability3));
-	
-	FInv_SlotAvailability SlotAvailability4;
-	SlotAvailability4.AmountToFill = 2;
-	SlotAvailability4.Index = 3;
-	Result.SlotAvailabilities.Add(MoveTemp(SlotAvailability4));
+	// Determine if the item is stackable.
+	// Determine how many stacks to add.
+	// For each Grid Slot:
+		// If we don't have anymore to fill, break out of the loop early.
+		// Is this index claimed yet?
+		// Can the item fit here? (i.e. is it out of grid bounds?)
+		// Is there room at this index? (i.e. are there other items in the way?)
+		// Check any other important conditions - ForEach2D over a 2D range
+			// Index claimed?
+			// Has valid item?
+			// Is this item the same type as the item we're trying to add?
+			// If so, is this a stackable item?
+			// If stackable, is this slot at the max stack size already?
+		// How much to fill?
+		// Update the amount left to fill
+	// How much is the Remainder?
 	
 	return Result;
 }
