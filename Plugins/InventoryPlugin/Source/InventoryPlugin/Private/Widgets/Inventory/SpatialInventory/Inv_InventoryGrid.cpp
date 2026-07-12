@@ -46,7 +46,7 @@ void UInv_InventoryGrid::AddItemToIndices(const FInv_SlotAvailabilityResult& Res
 	for (const FInv_SlotAvailability& Availability : Result.SlotAvailabilities)
 	{
 		AddItemAtIndex(NewItem, Availability.Index, Result.bStackable, Availability.AmountToFill);
-		UpdateGridSlots(NewItem, Availability.Index);
+		UpdateGridSlots(NewItem, Availability.Index, Result.bStackable, Availability.AmountToFill);
 	}
 }
 
@@ -87,13 +87,22 @@ void UInv_InventoryGrid::AddSlottedItemToCanvas(UInv_SlottedItem* SlottedItem, c
 	CPS->SetPosition(DrawPosWithPadding);
 }
 
-void UInv_InventoryGrid::UpdateGridSlots(UInv_InventoryItem* Item, const int32 Index)
+void UInv_InventoryGrid::UpdateGridSlots(UInv_InventoryItem* Item, const int32 Index, const bool bIsStackable, const int32 InStackAmount)
 {
+	if (bIsStackable)
+	{
+		GridSlots[Index]->SetStackAmount(InStackAmount);
+	}
+	
 	const FInv_GridFragment* GridFragment = GetFragment<FInv_GridFragment>(Item, FragmentTags::GridFragment);
-	FIntPoint ItemDimensions = GridFragment->GetGridSize();
-	UInv_InventoryStatics::ForEach2D(Index, Columns, ItemDimensions, GridSlots, [this](UInv_GridSlot* GridSlot)
+	FIntPoint ItemDimensions = GridFragment ? GridFragment->GetGridSize() : FIntPoint(1, 1);
+	
+	UInv_InventoryStatics::ForEach2D(Index, Columns, ItemDimensions, GridSlots, [&](UInv_GridSlot* GridSlot)
 	{
 		GridSlot->SetSlotToOccupied();
+		GridSlot->SetInventoryItem(Item);
+		GridSlot->SetIsAvailable(bIsStackable);
+		GridSlot->SetUpperLeftIndex(Index);
 	});
 }
 
