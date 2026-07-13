@@ -125,10 +125,15 @@ void UInv_InventoryGrid::SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, con
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemManifest& InItemManifest)
 {
 	FInv_SlotAvailabilityResult Result;
-	
+
+	// Determine if the item is stackable
 	const FInv_StackableFragment* StackableFragment = InItemManifest.GetFragmentOfType<FInv_StackableFragment>();
 	Result.bStackable = StackableFragment != nullptr;
+	
 	// Determine how many stacks to add.
+	const int32 MaxStackAmount = Result.bStackable ? StackableFragment->GetMaxStackSize() : 1;
+	int32 StackAmount = Result.bStackable ? StackableFragment->GetStackCount() : 1;
+	
 	// For each Grid Slot:
 		// If we don't have anymore to fill, break out of the loop early.
 		// Is this index claimed yet?
