@@ -134,13 +134,15 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 	const int32 MaxStackAmount = Result.bStackable ? StackableFragment->GetMaxStackSize() : 1;
 	int32 AmountToFill = Result.bStackable ? StackableFragment->GetStackCount() : 1;
 
+	TSet<int32> CheckedIndices;	
 	// For each Grid Slot:
 	for (const auto& GridSlot : GridSlots)
 	{
 		// If we don't have anymore to fill, break out of the loop early.
 		if (AmountToFill == 0) break;
 		
-		// Is this index claimed yet?
+		// Is this index claimed yet? /* pastikan lagi ini benar pake TileIndex atau index beda lagi */
+		if (IsIndexClaimed(CheckedIndices, GridSlot->GetTileIndex())) continue;
 		// Can the item fit here? (i.e. is it out of grid bounds?)
 		// Is there room at this index? (i.e. are there other items in the way?)
 		// Check any other important conditions - ForEach2D over a 2D range
@@ -156,6 +158,11 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		
 	
 	return Result;
+}
+
+bool UInv_InventoryGrid::IsIndexClaimed(const TSet<int>& CheckedIndices, const int32 Index) const
+{
+	return CheckedIndices.Contains(Index);
 }
 
 void UInv_InventoryGrid::ConstructGrid()
