@@ -143,7 +143,13 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		
 		// Is this index claimed yet? /* pastikan lagi ini benar pake TileIndex atau index beda lagi */
 		if (IsIndexClaimed(CheckedIndices, GridSlot->GetTileIndex())) continue;
+		
 		// Can the item fit here? (i.e. is it out of grid bounds?)
+		if (HasRoomAtIndex(GridSlot, GetItemDimensions(InItemManifest)))
+		{
+			continue;
+		}
+		
 		// Is there room at this index? (i.e. are there other items in the way?)
 		// Check any other important conditions - ForEach2D over a 2D range
 			// Index claimed?
@@ -163,6 +169,26 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 bool UInv_InventoryGrid::IsIndexClaimed(const TSet<int>& CheckedIndices, const int32 Index) const
 {
 	return CheckedIndices.Contains(Index);
+}
+
+FIntPoint UInv_InventoryGrid::GetItemDimensions(const FInv_ItemManifest& ItemManifest)
+{
+	const FInv_GridFragment* GridFragment = ItemManifest.GetFragmentOfType<FInv_GridFragment>();
+	FIntPoint GridDimensions = GridFragment ? GridFragment->GetGridSize() : FIntPoint(1, 1);
+}
+
+bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions)
+{
+	bool bHasRoomAtIndex = true;
+
+	UInv_InventoryStatics::ForEach2D(
+		GridSlot->GetTileIndex(),
+		Columns,
+		GridDimensions,
+		GridSlots,
+		[](){});
+
+	return bHasRoomAtIndex;
 }
 
 void UInv_InventoryGrid::ConstructGrid()
