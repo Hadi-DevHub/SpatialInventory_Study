@@ -190,7 +190,7 @@ bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint
 		GridSlots,
 		[&](UInv_GridSlot* SubGridSlot)
 		{
-			if (CheckForSlotConstraints(SubGridSlot, CheckedIndices, OutTentativelyClaimed))
+			if (CheckForSlotConstraints(GridSlot, SubGridSlot, CheckedIndices, OutTentativelyClaimed))
 			{
 				OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
 			}
@@ -203,7 +203,7 @@ bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint
 	return bHasRoomAtIndex;
 }
 
-bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed)
+bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed)
 {
 	if (IsIndexClaimed(CheckedIndices, SubGridSlot->GetTileIndex()))
 	{
@@ -215,12 +215,23 @@ bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* SubGridSlot, con
 		OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
 		return true;
 	}
+
+	//checks if this gridslot is an upper left slot?
+	if (!IsUpperLeftSlot(GridSlot, SubGridSlot))
+	{
+		return false;
+	}
 	return false;
 }
 
 bool UInv_InventoryGrid::HasValidItem(UInv_GridSlot* GridSlot) const
 {
 	return GridSlot->GetInventoryItem().IsValid();
+}
+
+bool UInv_InventoryGrid::IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot)
+{
+	return GridSlot->GetTileIndex() == SubGridSlot->GetUpperLeftIndex();
 }
 
 void UInv_InventoryGrid::ConstructGrid()

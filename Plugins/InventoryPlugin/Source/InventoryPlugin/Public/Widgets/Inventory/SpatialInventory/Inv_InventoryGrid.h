@@ -53,8 +53,9 @@ private:
 	bool IsIndexClaimed(const TSet<int>& CheckedIndices, const int32 Index) const;
 	bool HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
 	FIntPoint GetItemDimensions(const FInv_ItemManifest& ItemManifest);
-	bool CheckForSlotConstraints(UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
+	bool CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
 	bool HasValidItem(UInv_GridSlot* GridSlot) const;
+	bool IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot);
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 
