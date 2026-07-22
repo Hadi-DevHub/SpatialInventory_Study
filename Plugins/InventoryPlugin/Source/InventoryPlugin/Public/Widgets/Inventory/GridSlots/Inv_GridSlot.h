@@ -34,7 +34,7 @@ public:
 	int32 GetStackAmount() const { return StackAmount; };
 	int32 GetUpperLeftIndex() const { return UpperLeftIndex; };
 	bool GetIsAvailable() const { return bSlotAvailable; };
-	UInv_InventoryItem* GetInventoryItem() const { return InventoryItem.Get(); };
+	TWeakObjectPtr<UInv_InventoryItem> GetInventoryItem() const { return InventoryItem; };
 
 	void SetTileIndex(int32 InTileIndex) { TileIndex = InTileIndex; }
 	void SetStackAmount(int32 InStackAmount) { StackAmount = InStackAmount; }

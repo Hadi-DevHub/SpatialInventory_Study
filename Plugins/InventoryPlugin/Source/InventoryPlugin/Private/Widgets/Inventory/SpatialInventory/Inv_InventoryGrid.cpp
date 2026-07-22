@@ -163,7 +163,6 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		// Update the amount left to fill
 		// How much is the Remainder?
 	}
-		
 	
 	return Result;
 }
@@ -191,7 +190,7 @@ bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint
 		GridSlots,
 		[&](UInv_GridSlot* SubGridSlot)
 		{
-			if (CheckForSlotConstraints(SubGridSlot))
+			if (CheckForSlotConstraints(SubGridSlot, CheckedIndices, OutTentativelyClaimed))
 			{
 				OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
 			}
@@ -204,9 +203,24 @@ bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint
 	return bHasRoomAtIndex;
 }
 
-bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* SubGridSlot)
+bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed)
 {
-	return true;
+	if (IsIndexClaimed(CheckedIndices, SubGridSlot->GetTileIndex()))
+	{
+		return false;
+	}
+
+	if (!HasValidItem(SubGridSlot))
+	{
+		OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
+		return true;
+	}
+	return false;
+}
+
+bool UInv_InventoryGrid::HasValidItem(UInv_GridSlot* GridSlot) const
+{
+	return GridSlot->GetInventoryItem().IsValid();
 }
 
 void UInv_InventoryGrid::ConstructGrid()
