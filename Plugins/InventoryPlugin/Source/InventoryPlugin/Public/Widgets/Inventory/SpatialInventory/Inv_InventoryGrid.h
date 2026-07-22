@@ -51,8 +51,9 @@ private:
 	void SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment) const;
 	FInv_SlotAvailabilityResult HasRoomForItem(const FInv_ItemManifest& InItemManifest);
 	bool IsIndexClaimed(const TSet<int>& CheckedIndices, const int32 Index) const;
-	bool HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions);
+	bool HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
 	FIntPoint GetItemDimensions(const FInv_ItemManifest& ItemManifest);
+	bool CheckForSlotConstraints(UInv_GridSlot* SubGridSlot);
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 

@@ -143,12 +143,14 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		
 		// Is this index claimed yet? /* pastikan lagi ini benar pake TileIndex atau index beda lagi */
 		if (IsIndexClaimed(CheckedIndices, GridSlot->GetTileIndex())) continue;
-		
+
 		// Can the item fit here? (i.e. is it out of grid bounds?)
-		if (HasRoomAtIndex(GridSlot, GetItemDimensions(InItemManifest)))
+		TSet<int32> TentativelyClaimed;	
+		if (!HasRoomAtIndex(GridSlot, GetItemDimensions(InItemManifest), CheckedIndices, TentativelyClaimed))
 		{
 			continue;
 		}
+		CheckedIndices.Append(TentativelyClaimed);
 		
 		// Is there room at this index? (i.e. are there other items in the way?)
 		// Check any other important conditions - ForEach2D over a 2D range
@@ -174,10 +176,11 @@ bool UInv_InventoryGrid::IsIndexClaimed(const TSet<int>& CheckedIndices, const i
 FIntPoint UInv_InventoryGrid::GetItemDimensions(const FInv_ItemManifest& ItemManifest)
 {
 	const FInv_GridFragment* GridFragment = ItemManifest.GetFragmentOfType<FInv_GridFragment>();
-	FIntPoint GridDimensions = GridFragment ? GridFragment->GetGridSize() : FIntPoint(1, 1);
+	return GridFragment ? GridFragment->GetGridSize() : FIntPoint(1, 1);
 }
 
-bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions)
+bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions,
+                                        const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed)
 {
 	bool bHasRoomAtIndex = true;
 
@@ -186,9 +189,24 @@ bool UInv_InventoryGrid::HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint
 		Columns,
 		GridDimensions,
 		GridSlots,
-		[](){});
+		[&](UInv_GridSlot* SubGridSlot)
+		{
+			if (CheckForSlotConstraints(SubGridSlot))
+			{
+				OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
+			}
+			else
+			{
+				bHasRoomAtIndex = false;
+			}
+		});
 
 	return bHasRoomAtIndex;
+}
+
+bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* SubGridSlot)
+{
+	return true;
 }
 
 void UInv_InventoryGrid::ConstructGrid()
