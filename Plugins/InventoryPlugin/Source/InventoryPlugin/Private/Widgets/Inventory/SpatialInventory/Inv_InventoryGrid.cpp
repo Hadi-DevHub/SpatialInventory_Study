@@ -152,16 +152,7 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		}
 		CheckedIndices.Append(TentativelyClaimed);
 		
-		// Is there room at this index? (i.e. are there other items in the way?)
-		// Check any other important conditions - ForEach2D over a 2D range
-			// Index claimed?
-			// Has valid item?
-			// Is this item the same type as the item we're trying to add?
-			// If so, is this a stackable item?
-			// If stackable, is this slot at the max stack size already?
-		// How much to fill?
-		// Update the amount left to fill
-		// How much is the Remainder?
+		
 	}
 	
 	return Result;
@@ -210,6 +201,7 @@ bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_G
 		return false;
 	}
 
+	// Has valid item?
 	if (!HasValidItem(SubGridSlot))
 	{
 		OutTentativelyClaimed.Add(SubGridSlot->GetTileIndex());
@@ -221,6 +213,15 @@ bool UInv_InventoryGrid::CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_G
 	{
 		return false;
 	}
+
+	const UInv_InventoryItem* InventoryItem = SubGridSlot->GetInventoryItem().Get();
+	if (!InventoryItem->IsStackable()) return false;
+
+	// Is this item the same type as the item we're trying to add?
+	// If stackable, is this slot at the max stack size already?
+	// How much to fill?
+	// Update the amount left to fill
+	// How much is the Remainder?
 	return false;
 }
 
