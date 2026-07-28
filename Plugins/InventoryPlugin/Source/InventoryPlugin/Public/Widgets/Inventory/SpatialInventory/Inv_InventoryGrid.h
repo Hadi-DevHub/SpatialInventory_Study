@@ -58,6 +58,8 @@ private:
 	bool IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot);
 	bool DoesItemTypeMatch(UInv_InventoryItem* SubItem, const FGameplayTag& ItemType) const;
 	bool IsItemInGridBounds(const int32& StartIndex, const FIntPoint& ItemDimensions) const;
+	int32 DetermineAmountToFillInSlot(bool bInStackable, int32 InMaxStackAmount, int32 InAmountToFill, const UInv_GridSlot* GridSlot) const;
+	int32 GetStackAmount(const UInv_GridSlot* InGridSlot) const;
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 

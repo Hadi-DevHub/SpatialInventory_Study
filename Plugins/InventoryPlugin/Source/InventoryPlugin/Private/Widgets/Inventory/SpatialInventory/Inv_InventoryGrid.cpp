@@ -265,6 +265,23 @@ bool UInv_InventoryGrid::IsItemInGridBounds(const int32& StartIndex, const FIntP
 	
 }
 
+int32 UInv_InventoryGrid::DetermineAmountToFillInSlot(bool bInStackable, int32 InMaxStackAmount, int32 InAmountToFill, const UInv_GridSlot* GridSlot) const
+{
+	int32 RoomToFillInSlot = InMaxStackAmount - GetStackAmount(GridSlot);
+	return bInStackable ? FMath::Min(RoomToFillInSlot, InAmountToFill) : 1;
+}
+
+int32 UInv_InventoryGrid::GetStackAmount(const UInv_GridSlot* InGridSlot) const 
+{
+	int32 CurrentSlotStackCount = InGridSlot->GetStackAmount();
+	if (const int32 UpperLeftIndex = InGridSlot->GetUpperLeftIndex(); UpperLeftIndex != INDEX_NONE)
+	{
+		UInv_GridSlot* UpperLeftGridSlot = GridSlots[UpperLeftIndex];
+		CurrentSlotStackCount = UpperLeftGridSlot->GetStackAmount();
+	}
+	return CurrentSlotStackCount;
+}
+
 void UInv_InventoryGrid::ConstructGrid()
 {
 	GridSlots.Reserve(Rows * Columns);
