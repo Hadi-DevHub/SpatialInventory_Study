@@ -144,6 +144,9 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		// Is this index claimed yet? /* pastikan lagi ini benar pake TileIndex atau index beda lagi */
 		if (IsIndexClaimed(CheckedIndices, GridSlot->GetTileIndex())) continue;
 
+		//Is item in grid bounds
+		if (IsItemInGridBounds(GridSlot->GetTileIndex(), GetItemDimensions(InItemManifest));
+
 		// Can the item fit here? (i.e. is it out of grid bounds?)
 		TSet<int32> TentativelyClaimed;	
 		if (!HasRoomAtIndex(GridSlot, GetItemDimensions(InItemManifest), CheckedIndices, TentativelyClaimed, InItemManifest.GetItemType(),MaxStackAmount))
@@ -251,6 +254,15 @@ bool UInv_InventoryGrid::IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot*
 bool UInv_InventoryGrid::DoesItemTypeMatch(UInv_InventoryItem* SubItem, const FGameplayTag& ItemType) const
 {
 	return SubItem->GetItemManifest().GetItemType().MatchesTagExact(ItemType);
+}
+
+bool UInv_InventoryGrid::IsItemInGridBounds(const int32& StartIndex, const FIntPoint& ItemDimensions) const
+{
+	if (StartIndex >= GridSlots.Num() || StartIndex < 0) return false;
+	const int32 EndColumn = (StartIndex % Columns) + ItemDimensions.X;
+	const int32 EndRow = (StartIndex / Columns) + ItemDimensions.Y;
+	return EndColumn <= Columns && EndRow <= Rows;
+	
 }
 
 void UInv_InventoryGrid::ConstructGrid()

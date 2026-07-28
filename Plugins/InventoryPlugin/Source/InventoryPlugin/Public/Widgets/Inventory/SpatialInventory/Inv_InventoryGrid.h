@@ -57,6 +57,7 @@ private:
 	bool HasValidItem(UInv_GridSlot* GridSlot) const;
 	bool IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot);
 	bool DoesItemTypeMatch(UInv_InventoryItem* SubItem, const FGameplayTag& ItemType) const;
+	bool IsItemInGridBounds(const int32& StartIndex, const FIntPoint& ItemDimensions) const;
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 
