@@ -51,11 +51,12 @@ private:
 	void SetSlottedItemImage(UInv_SlottedItem* _SlottedItem, const FInv_GridFragment* _GridFragment, const FInv_IconFragment* _IconFragment) const;
 	FInv_SlotAvailabilityResult HasRoomForItem(const FInv_ItemManifest& InItemManifest);
 	bool IsIndexClaimed(const TSet<int>& CheckedIndices, const int32 Index) const;
-	bool HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
+	bool HasRoomAtIndex(UInv_GridSlot* GridSlot, const FIntPoint& GridDimensions, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed, const FGameplayTag& ItemType);
 	FIntPoint GetItemDimensions(const FInv_ItemManifest& ItemManifest);
-	bool CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed);
+	bool CheckForSlotConstraints(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot, const TSet<int32>& CheckedIndices, TSet<int32>& OutTentativelyClaimed, const FGameplayTag& ItemType);
 	bool HasValidItem(UInv_GridSlot* GridSlot) const;
 	bool IsUpperLeftSlot(UInv_GridSlot* GridSlot, UInv_GridSlot* SubGridSlot);
+	bool DoesItemTypeMatch(UInv_InventoryItem* SubItem, const FGameplayTag& ItemType) const;
 
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 

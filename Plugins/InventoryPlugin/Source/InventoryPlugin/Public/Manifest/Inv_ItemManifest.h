@@ -24,6 +24,8 @@ public:
     template<typename T> requires std::derived_from<T, FInv_ItemFragment>
     const T* GetFragmentOfType() const;
 
+    FGameplayTag GetItemType() const { return ItemType; };
+
 private:
 
     UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
@@ -31,6 +33,9 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "INV PLUGIN", meta = (ExcludeBaseStruct))
     TArray<TInstancedStruct<FInv_ItemFragment>> Fragments;
+
+    UPROPERTY(EditAnywhere, Category = "INV PLUGIN")
+    FGameplayTag ItemType = FGameplayTag();
     
 };
 
