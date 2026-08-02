@@ -145,7 +145,7 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		if (IsIndexClaimed(CheckedIndices, GridSlot->GetTileIndex())) continue;
 
 		//Is item in grid bounds
-		if (IsItemInGridBounds(GridSlot->GetTileIndex(), GetItemDimensions(InItemManifest));
+		if (!IsItemInGridBounds(GridSlot->GetTileIndex(), GetItemDimensions(InItemManifest))) continue;
 
 		// Can the item fit here? (i.e. is it out of grid bounds?)
 		TSet<int32> TentativelyClaimed;	
@@ -153,7 +153,24 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		{
 			continue;
 		}
+
+		const int32 AmountToFillInSlot = DetermineAmountToFillInSlot(Result.bStackable, MaxStackAmount, AmountToFill, GridSlot);
+		if (AmountToFillInSlot == 0) continue;
+
 		CheckedIndices.Append(TentativelyClaimed);
+		
+		// Update the amount left to fill
+		Result.TotalRoomToFill += AmountToFillInSlot;
+		Result.SlotAvailabilities.Emplace(
+			FInv_SlotAvailability{
+			HasValidItem(GridSlot) ? GridSlot->GetUpperLeftIndex() : GridSlot->GetTileIndex(),
+				Result.bStackable ? AmountToFillInSlot : 1,
+				HasValidItem(GridSlot)
+			});
+
+		AmountToFill -= AmountToFillInSlot;
+		Result.Remainder = AmountToFill;
+		if (AmountToFill == 0) return Result;
 	}
 	return Result;
 }

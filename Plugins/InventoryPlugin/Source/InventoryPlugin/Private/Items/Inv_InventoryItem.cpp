@@ -1,5 +1,5 @@
 #include "Items/Inv_InventoryItem.h"
-
+#include "Manifest/Inv_ItemManifest.h"
 #include "Fragments/Inv_ItemFragment.h"
 #include "StructUtils/InstancedStruct.h"
 #include "Net/UnrealNetwork.h"
@@ -18,7 +18,7 @@ void UInv_InventoryItem::SetItemManifest(const FInv_ItemManifest& Manifest)
 
 bool UInv_InventoryItem::IsStackable() const
 {
-	const FInv_StackableFragment* StackableFragment = FInv_ItemManifest::GetFragmentOfType<FInv_StackableFragment>();
+	const FInv_StackableFragment* StackableFragment = GetItemManifest().GetFragmentOfType<FInv_StackableFragment>();
 	return StackableFragment != nullptr;
 }
 
