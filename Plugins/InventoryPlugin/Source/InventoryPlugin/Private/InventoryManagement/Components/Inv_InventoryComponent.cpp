@@ -1,6 +1,8 @@
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "Widgets/Inventory/InventoryBase/Inv_UW_InventoryBase.h"
 #include "Blueprint/UserWidget.h"
+#include "Items/Components/Inv_ItemComponent.h"
+#include "Items/Inv_InventoryItem.h"
 #include "Net/UnrealNetwork.h"
 #include "Types/Inv_GridTypes.h"
 
@@ -43,6 +45,9 @@ void UInv_InventoryComponent::AddRepSubObj(UObject* SubObj)
 void UInv_InventoryComponent::TryAddItem(UInv_ItemComponent* InItemComponent)
 {
 	FInv_SlotAvailabilityResult Result = InventoryWidget->HasRoomForItem(InItemComponent);
+
+	UInv_InventoryItem* FoundItem = InventoryList.FindFirstItemByType(InItemComponent->GetItemManifest().GetItemType());
+	Result.Item = FoundItem;
 
 	if (Result.TotalRoomToFill == 0)
 	{
