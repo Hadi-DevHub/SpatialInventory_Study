@@ -71,7 +71,7 @@ UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Ite
 	SetSlottedItemImage(SlottedItem, _GridFragment, _IconFragment);
 	SlottedItem->SetIsStackable(_bStackable);
 	const int32 StackAmount = _bStackable ? _StackAmount : 0;
-	SlottedItem->UpdateStackCount(_StackAmount);
+	SlottedItem->UpdateStackCount(StackAmount);
 	
 	return SlottedItem;
 }
@@ -164,9 +164,10 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 		Result.SlotAvailabilities.Emplace(
 			FInv_SlotAvailability{
 			HasValidItem(GridSlot) ? GridSlot->GetUpperLeftIndex() : GridSlot->GetTileIndex(),
-				Result.bStackable ? AmountToFillInSlot : 1,
+				Result.bStackable ? AmountToFillInSlot : 0,
 				HasValidItem(GridSlot)
-			});
+			}
+			);
 
 		AmountToFill -= AmountToFillInSlot;
 		Result.Remainder = AmountToFill;
@@ -251,11 +252,7 @@ bool UInv_InventoryGrid::CheckForSlotConstraints(
 	// If stackable, is this slot at the max stack size already?
 	if (GridSlot->GetStackAmount() >= MaxStackAmount) return false;
 	
-	// How much to fill?
-	// Update the amount left to fill
-	// How much is the Remainder?
-	
-	return false;
+	return true;
 }
 
 bool UInv_InventoryGrid::HasValidItem(UInv_GridSlot* GridSlot) const

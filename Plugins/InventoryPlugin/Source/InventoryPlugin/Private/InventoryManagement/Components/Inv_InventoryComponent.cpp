@@ -52,6 +52,7 @@ void UInv_InventoryComponent::TryAddItem(UInv_ItemComponent* InItemComponent)
 	if (Result.TotalRoomToFill == 0)
 	{
 		OnNoRoomInInventory.Broadcast();
+		return;
 	}
 
 	if (Result.Item.IsValid() && Result.bStackable)
