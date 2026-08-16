@@ -80,6 +80,15 @@ void UInv_InventoryComponent::Server_AddNewItem_Implementation(UInv_ItemComponen
 
 void UInv_InventoryComponent::Server_AddStacksToItem_Implementation(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder)
 {
+	FInv_ItemManifest ItemManifest = InItem->GetItemManifest();
+	FGameplayTag ItemType = IsValid(InItem) ? ItemManifest.GetItemType() : FGameplayTag::EmptyTag;
+	UInv_InventoryItem* Item = InventoryList.FindFirstItemByType(ItemType);
+
+	if (!IsValid(Item)) return;
+
+	Item->SetStackCount(Item->GetTotalStackCount() + StackCount);
+	// check if remainder == 0, if true handle
+	// set remainder stack count
 	
 }
 
