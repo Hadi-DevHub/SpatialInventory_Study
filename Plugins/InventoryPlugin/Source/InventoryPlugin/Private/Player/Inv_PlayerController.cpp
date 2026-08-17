@@ -71,7 +71,7 @@ void AInv_PlayerController::CreateHUDWidget()
 
 void AInv_PlayerController::TraceForItems()
 {
-	if (!IsValid(GEngine)) return;
+	if (!IsValid(GEngine) || !IsValid(GEngine->GameViewport)) return;
 	
 	FVector2D Viewport;
 	GEngine->GameViewport->GetViewportSize(Viewport);

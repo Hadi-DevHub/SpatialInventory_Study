@@ -1,6 +1,7 @@
 #include "InventoryManagement/Components/Inv_InventoryComponent.h"
 #include "Widgets/Inventory/InventoryBase/Inv_UW_InventoryBase.h"
 #include "Blueprint/UserWidget.h"
+#include "Fragments/Inv_ItemFragment.h"
 #include "Items/Components/Inv_ItemComponent.h"
 #include "Items/Inv_InventoryItem.h"
 #include "Net/UnrealNetwork.h"
@@ -76,6 +77,8 @@ void UInv_InventoryComponent::Server_AddNewItem_Implementation(UInv_ItemComponen
 	{
 		OnItemAdded.Broadcast(NewItem);
 	}
+	
+	InItem->PickedUp();
 }
 
 void UInv_InventoryComponent::Server_AddStacksToItem_Implementation(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder)
@@ -87,9 +90,15 @@ void UInv_InventoryComponent::Server_AddStacksToItem_Implementation(UInv_ItemCom
 	if (!IsValid(Item)) return;
 
 	Item->SetStackCount(Item->GetTotalStackCount() + StackCount);
-	// check if remainder == 0, if true handle
-	// set remainder stack count
-	
+
+	if (Remainder == 0)
+	{
+		InItem->PickedUp();
+	}
+	else if (FInv_StackableFragment* StackableFragment = ItemManifest.GetFragmentOfTypeMutable<FInv_StackableFragment>())
+	{
+		StackableFragment->SetStackCount(Remainder);
+	}
 }
 
 void UInv_InventoryComponent::BeginPlay()

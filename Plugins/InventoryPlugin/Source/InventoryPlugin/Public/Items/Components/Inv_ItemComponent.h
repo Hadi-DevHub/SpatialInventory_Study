@@ -19,6 +19,11 @@ public:
 
 	FInv_ItemManifest GetItemManifest() const { return ItemManifest; }
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnPickedUp();
+	
+	void PickedUp();
+
 private:
 	UPROPERTY(EditAnywhere , Category = "INV PLUGIN | Item Property")
 	FString PickupMessage = "E - To Pickup";
