@@ -21,6 +21,7 @@ void UInv_InventoryGrid::NativeOnInitialized()
 	ConstructGrid();
 	InventoryComponent = UInv_InventoryStatics::GetInventoryComponent(GetOwningPlayer());
 	InventoryComponent->OnItemAdded.AddDynamic(this, &ThisClass::AddItem);
+	InventoryComponent->OnStacksAdded.AddDynamic(this, &ThisClass::AddStack);
 }
 
 void UInv_InventoryGrid::AddItem(UInv_InventoryItem* Item)
@@ -29,6 +30,10 @@ void UInv_InventoryGrid::AddItem(UInv_InventoryItem* Item)
 
 	FInv_SlotAvailabilityResult Result = HasRoomForItem(Item);
 	AddItemToIndices(Result, Item);
+}
+
+void UInv_InventoryGrid::AddStack(FInv_SlotAvailabilityResult& Result)
+{
 }
 
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(UInv_ItemComponent* InItemComponent)
