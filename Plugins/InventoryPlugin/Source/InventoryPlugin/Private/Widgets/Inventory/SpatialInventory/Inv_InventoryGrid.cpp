@@ -32,8 +32,25 @@ void UInv_InventoryGrid::AddItem(UInv_InventoryItem* Item)
 	AddItemToIndices(Result, Item);
 }
 
-void UInv_InventoryGrid::AddStack(FInv_SlotAvailabilityResult& Result)
+void UInv_InventoryGrid::AddStack(const FInv_SlotAvailabilityResult& Result)
 {
+	if (!MatchesCategory(Result.Item.Get())) return;
+
+	for (const FInv_SlotAvailability& Availability : Result.SlotAvailabilities)
+	{
+		if (Availability.bItemAtIndex)
+		{
+			const auto& GridSlot = GridSlots[Availability.Index];
+			const auto& SlottedItem = SlottedItems[Availability.Index];
+			SlottedItem->UpdateStackCount(GridSlot->GetStackAmount() + Availability.AmountToFill);
+			GridSlot->SetStackAmount(GridSlot->GetStackAmount() + Availability.AmountToFill);
+		}
+		else
+		{
+			AddItemAtIndex(Result.Item.Get(), Availability.Index, Result.bStackable, Availability.AmountToFill);
+			UpdateGridSlots(Result.Item.Get(), Availability.Index, Result.bStackable, Result.bStackable);
+		}
+	}
 }
 
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(UInv_ItemComponent* InItemComponent)
@@ -64,6 +81,7 @@ void UInv_InventoryGrid::AddItemAtIndex(UInv_InventoryItem* _Item, const int32 _
 
 	UInv_SlottedItem* SlottedItem = CreateSlottedItem(_Item, GridFragment, IconFragment, _Index, _bStackable, _StackAmount);
 	AddSlottedItemToCanvas(SlottedItem, GridFragment, _Index);
+	
 	SlottedItems.Add(_Index, SlottedItem);
 }
 
@@ -175,7 +193,9 @@ FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const FInv_ItemMa
 			);
 
 		AmountToFill -= AmountToFillInSlot;
+		
 		Result.Remainder = AmountToFill;
+		
 		if (AmountToFill == 0) return Result;
 	}
 	return Result;

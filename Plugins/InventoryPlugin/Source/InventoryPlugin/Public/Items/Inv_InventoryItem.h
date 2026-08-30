@@ -19,7 +19,7 @@ public:
 	virtual bool IsSupportedForNetworking() const override { return true; }
 
 	void SetItemManifest(const FInv_ItemManifest& Manifest);
-	void SetStackCount(const int32 StackCount) { TotalStackCount = StackCount; };
+	void SetTotalStackCount(const int32 StackCount) { TotalStackCount = StackCount; };
 
 	const FInv_ItemManifest& GetItemManifest() const { return ItemManifest.Get<FInv_ItemManifest>(); }
 	const FInv_ItemManifest& GetItemManifestMutable() { return ItemManifest.GetMutable<FInv_ItemManifest>(); }

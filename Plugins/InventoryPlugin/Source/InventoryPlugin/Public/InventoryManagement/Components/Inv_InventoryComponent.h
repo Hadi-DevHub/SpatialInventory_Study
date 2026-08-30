@@ -11,7 +11,7 @@ class UInv_UW_InventoryBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemChange, UInv_InventoryItem*, Item);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNoRoomInInventory);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStacksAdded, FInv_SlotAvailabilityResult&, Result);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStacksAdded,const FInv_SlotAvailabilityResult&, Result);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class INVENTORYPLUGIN_API UInv_InventoryComponent : public UActorComponent
@@ -35,10 +35,10 @@ public:
 	void TryAddItem(UInv_ItemComponent* InItemComponent);
 
 	UFUNCTION(Server, Reliable)
-	void Server_AddNewItem(UInv_ItemComponent* InItem, int32 StackCount);
+	void Server_AddNewItem(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder);
 	
 	UFUNCTION(Server, Reliable)
-	void Server_AddStacksToItem(UInv_ItemComponent* InItem, int32 StackCount, int32 Remainder);
+	void Server_AddStacksToItem(UInv_ItemComponent* ItemComponent, int32 StackCount, int32 Remainder);
 
 protected:
 	virtual void BeginPlay() override;

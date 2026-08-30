@@ -31,7 +31,7 @@ public:
 	void AddItem(UInv_InventoryItem* Item);
 	
 	UFUNCTION()
-	void AddStack(FInv_SlotAvailabilityResult& Result);
+	void AddStack(const FInv_SlotAvailabilityResult& Result);
 
 	FInv_SlotAvailabilityResult HasRoomForItem(UInv_ItemComponent* InItemComponent);
 	FInv_SlotAvailabilityResult HasRoomForItem(UInv_InventoryItem* InItem);

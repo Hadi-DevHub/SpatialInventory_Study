@@ -18,6 +18,7 @@ public:
 	FString GetPickupMessage() const { return PickupMessage; }
 
 	FInv_ItemManifest GetItemManifest() const { return ItemManifest; }
+	FInv_ItemManifest& GetItemManifestMutable() { return ItemManifest; }
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnPickedUp();
