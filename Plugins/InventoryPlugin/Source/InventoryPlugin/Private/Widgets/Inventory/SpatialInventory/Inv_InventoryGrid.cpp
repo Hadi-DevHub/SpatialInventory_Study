@@ -377,7 +377,7 @@ bool UInv_InventoryGrid::LeftMouseClick(const FPointerEvent& MouseEvent)
 
 void UInv_InventoryGrid::PickUpSlottedItem(UInv_InventoryItem* Item, int32 GridIndex)
 {
-	AssignHoverItem(Item);
+	AssignHoverItem(Item, GridIndex, GridIndex);
 	// remove clicked item from the grid
 }
 
@@ -407,4 +407,14 @@ void UInv_InventoryGrid::AssignHoverItem(UInv_InventoryItem* Item)
 	GetOwningPlayer()->SetMouseCursorWidget(EMouseCursor::Default, HoverItem);
 	
 }
+
+void UInv_InventoryGrid::AssignHoverItem(UInv_InventoryItem* Item, int32 GridIndex, int32 PreviousGridIndex)
+{
+	AssignHoverItem(Item);
+
+	HoverItem->SetPreviousGridIndex(PreviousGridIndex);
+	HoverItem->UpdateStackCount(Item->IsStackable() ? GridSlots[GridIndex]->GetStackAmount() : 0);
+}
+
+
 
