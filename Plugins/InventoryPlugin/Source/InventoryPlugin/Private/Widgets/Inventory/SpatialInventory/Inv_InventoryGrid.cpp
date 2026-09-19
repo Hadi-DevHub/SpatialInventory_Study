@@ -13,6 +13,7 @@
 #include "Utils/WidgetUtils.h"
 #include "Widgets/Inventory/SlottedItem/Inv_SlottedItem.h"
 #include "InventoryManagement/InventoryStatics/UInv_InventoryStatics.h"
+#include "Widgets/Inventory/HoverItem/Inv_HoverItem.h"
 
 void UInv_InventoryGrid::NativeOnInitialized()
 {
@@ -314,6 +315,14 @@ int32 UInv_InventoryGrid::DetermineAmountToFillInSlot(bool bInStackable, int32 I
 void UInv_InventoryGrid::OnSlottedItemClicked(int32 GridIndex, const FPointerEvent& InMouseEvent)
 {
 	UE_LOG(LogTemp, Display, TEXT("Clicken on item at index %d"), GridIndex);
+
+	check(GridSlots.IsValidIndex(GridIndex));
+	UInv_InventoryItem* Item = GridSlots[GridIndex]->GetInventoryItem().Get();
+
+	if (!IsValid(Item) &&  LeftMouseClick(InMouseEvent))
+	{
+		// todo:
+	}
 }
 
 int32 UInv_InventoryGrid::GetStackAmount(const UInv_GridSlot* InGridSlot) const 
@@ -354,4 +363,15 @@ void UInv_InventoryGrid::ConstructGrid()
 bool UInv_InventoryGrid::MatchesCategory(const UInv_InventoryItem* Item) const
 {
 	return Item->GetItemManifest().GetItemCategory() == ItemCategory;
+}
+
+bool UInv_InventoryGrid::RightMouseClick(const FPointerEvent& MouseEvent)
+{
+	return MouseEvent.GetEffectingButton() == EKeys::RightMouseButton;
+}
+
+bool UInv_InventoryGrid::LeftMouseClick(const FPointerEvent& MouseEvent)
+{
+	return MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton;
+
 }

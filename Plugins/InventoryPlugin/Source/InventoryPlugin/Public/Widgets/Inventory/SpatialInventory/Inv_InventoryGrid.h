@@ -6,6 +6,7 @@
 #include "Types/Inv_GridTypes.h"
 #include "Inv_InventoryGrid.generated.h"
 
+class UInv_HoverItem;
 struct FInv_IconFragment;
 struct FInv_GridFragment;
 class UInv_SlottedItem;
@@ -63,6 +64,10 @@ private:
 	bool IsItemInGridBounds(const int32& StartIndex, const FIntPoint& ItemDimensions) const;
 	int32 DetermineAmountToFillInSlot(bool bInStackable, int32 InMaxStackAmount, int32 InAmountToFill, const UInv_GridSlot* GridSlot) const;
 	int32 GetStackAmount(const UInv_GridSlot* InGridSlot) const;
+	bool MatchesCategory(const UInv_InventoryItem* Item) const;
+
+	bool RightMouseClick(const FPointerEvent& MouseEvent);
+	bool LeftMouseClick(const FPointerEvent& MouseEvent);
 
 	UFUNCTION()
 	void OnSlottedItemClicked(int32 GridIndex, const FPointerEvent& InMouseEvent);
@@ -97,6 +102,12 @@ private:
 	UPROPERTY(EditAnywhere,Category = "INV PLUGIN")
 	float TileSize;
 
-	bool MatchesCategory(const UInv_InventoryItem* Item) const;
+	// Hover Item
+
+	UPROPERTY(EditDefaultsOnly,Category = "INV PLUGIN")
+	TSubclassOf<UInv_HoverItem> HoverItemClass;
+
+	UPROPERTY()
+	TObjectPtr<UInv_HoverItem> HoverItem;
 
 };
