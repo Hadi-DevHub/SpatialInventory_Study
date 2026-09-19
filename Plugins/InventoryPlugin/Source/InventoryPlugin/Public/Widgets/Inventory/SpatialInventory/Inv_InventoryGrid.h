@@ -71,6 +71,7 @@ private:
 	void PickUpSlottedItem(UInv_InventoryItem* Item, int32 GridIndex);
 	void AssignHoverItem(UInv_InventoryItem* Item);
 	void AssignHoverItem(UInv_InventoryItem* Item, int32 GridIndex, int32 PreviousGridIndex);
+	void RemoveItemFromGrid(UInv_InventoryItem* Item, int32 GridIndex);
 	
 
 	UFUNCTION()
