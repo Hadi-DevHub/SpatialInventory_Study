@@ -319,9 +319,9 @@ void UInv_InventoryGrid::OnSlottedItemClicked(int32 GridIndex, const FPointerEve
 	check(GridSlots.IsValidIndex(GridIndex));
 	UInv_InventoryItem* Item = GridSlots[GridIndex]->GetInventoryItem().Get();
 
-	if (!IsValid(Item) &&  LeftMouseClick(InMouseEvent))
+	if (!IsValid(HoverItem) &&  LeftMouseClick(InMouseEvent))
 	{
-		// todo:
+		PickUpSlottedItem(Item, GridIndex);
 	}
 }
 
@@ -373,5 +373,38 @@ bool UInv_InventoryGrid::RightMouseClick(const FPointerEvent& MouseEvent)
 bool UInv_InventoryGrid::LeftMouseClick(const FPointerEvent& MouseEvent)
 {
 	return MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton;
-
 }
+
+void UInv_InventoryGrid::PickUpSlottedItem(UInv_InventoryItem* Item, int32 GridIndex)
+{
+	AssignHoverItem(Item);
+	// remove clicked item from the grid
+}
+
+void UInv_InventoryGrid::AssignHoverItem(UInv_InventoryItem* Item)
+{
+	if (!IsValid(HoverItem))
+	{
+		HoverItem = CreateWidget<UInv_HoverItem>(GetOwningPlayer(), HoverItemClass);
+	}
+
+	const FInv_GridFragment* GridFragment = GetFragment<FInv_GridFragment>(Item, FragmentTags::GridFragment);
+	const FInv_IconFragment* IconFragment = GetFragment<FInv_IconFragment>(Item, FragmentTags::IconFragment);
+	if (!GridFragment || !IconFragment) return;
+
+	const FVector2D DrawSize = GetDrawSize(GridFragment);
+
+	FSlateBrush IconBrush;
+	IconBrush.SetResourceObject(IconFragment->GetIcon());
+	IconBrush.DrawAs = ESlateBrushDrawType::Image;
+	IconBrush.ImageSize = DrawSize * UWidgetLayoutLibrary::GetViewportScale(this);
+
+	HoverItem->SetImageIcon(IconBrush);
+	HoverItem->SetGridDimension(GridFragment->GetGridSize());
+	HoverItem->SetInventoryItem(Item);
+	HoverItem->SetIsStackable(Item->IsStackable());
+
+	GetOwningPlayer()->SetMouseCursorWidget(EMouseCursor::Default, HoverItem);
+	
+}
+

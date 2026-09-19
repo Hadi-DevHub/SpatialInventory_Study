@@ -68,6 +68,9 @@ private:
 
 	bool RightMouseClick(const FPointerEvent& MouseEvent);
 	bool LeftMouseClick(const FPointerEvent& MouseEvent);
+	void PickUpSlottedItem(UInv_InventoryItem* Item, int32 GridIndex);
+	void AssignHoverItem(UInv_InventoryItem* Item);
+	
 
 	UFUNCTION()
 	void OnSlottedItemClicked(int32 GridIndex, const FPointerEvent& InMouseEvent);
@@ -111,3 +114,4 @@ private:
 	TObjectPtr<UInv_HoverItem> HoverItem;
 
 };
+
