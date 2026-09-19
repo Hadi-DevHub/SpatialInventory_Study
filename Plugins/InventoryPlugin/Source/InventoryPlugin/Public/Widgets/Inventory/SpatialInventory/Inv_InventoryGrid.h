@@ -64,6 +64,9 @@ private:
 	int32 DetermineAmountToFillInSlot(bool bInStackable, int32 InMaxStackAmount, int32 InAmountToFill, const UInv_GridSlot* GridSlot) const;
 	int32 GetStackAmount(const UInv_GridSlot* InGridSlot) const;
 
+	UFUNCTION()
+	void OnSlottedItemClicked(int32 GridIndex, const FPointerEvent& InMouseEvent);
+
 	TWeakObjectPtr<UInv_InventoryComponent> InventoryComponent;
 
 	void ConstructGrid();

@@ -93,6 +93,7 @@ UInv_SlottedItem* UInv_InventoryGrid::CreateSlottedItem(UInv_InventoryItem* _Ite
 	SlottedItem->SetSlottedItemInventoryItemData(_Item);
 	SetSlottedItemImage(SlottedItem, _GridFragment, _IconFragment);
 	SlottedItem->SetIsStackable(_bStackable);
+	SlottedItem->OnSlottedItemClick.AddDynamic(this, &ThisClass::OnSlottedItemClicked);
 	const int32 StackAmount = _bStackable ? _StackAmount : 0;
 	SlottedItem->UpdateStackCount(StackAmount);
 	
@@ -308,6 +309,11 @@ int32 UInv_InventoryGrid::DetermineAmountToFillInSlot(bool bInStackable, int32 I
 {
 	int32 RoomToFillInSlot = InMaxStackAmount - GetStackAmount(GridSlot);
 	return bInStackable ? FMath::Min(RoomToFillInSlot, InAmountToFill) : 1;
+}
+
+void UInv_InventoryGrid::OnSlottedItemClicked(int32 GridIndex, const FPointerEvent& InMouseEvent)
+{
+	UE_LOG(LogTemp, Display, TEXT("Clicken on item at index %d"), GridIndex);
 }
 
 int32 UInv_InventoryGrid::GetStackAmount(const UInv_GridSlot* InGridSlot) const 
