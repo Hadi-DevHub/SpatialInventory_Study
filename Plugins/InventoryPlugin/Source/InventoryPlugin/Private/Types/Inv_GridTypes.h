@@ -39,3 +39,29 @@ struct FInv_SlotAvailabilityResult
 	bool bStackable {false};
 	TArray<FInv_SlotAvailability> SlotAvailabilities;
 };
+
+UENUM(BlueprintType)
+enum class EInv_TileQuadrant : uint8
+{
+	TopLeft,
+	TopRight,
+	BottomLeft,
+	BottomRight,
+	None
+};
+
+USTRUCT(BlueprintType)
+struct FInv_TileParameters
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "INV | PLUGIN")
+	FIntPoint TileCoordinates{};
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "INV | PLUGIN")
+	int32 TileIndex{};
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "INV | PLUGIN")
+	EInv_TileQuadrant TileQuadrant{EInv_TileQuadrant::None};
+	
+};
