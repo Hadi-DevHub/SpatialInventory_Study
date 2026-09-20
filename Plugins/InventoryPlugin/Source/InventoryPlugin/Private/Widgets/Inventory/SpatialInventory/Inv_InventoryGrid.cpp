@@ -465,5 +465,23 @@ FIntPoint UInv_InventoryGrid::CalculateHoveredDistance(const FVector2D& CanvasPo
 	return FIntPoint(FMath::FloorToInt32(MousePosition.X - CanvasPosition.X) / TileSize, FMath::FloorToInt32(MousePosition.Y - CanvasPosition.Y) / TileSize);
 }
 
+EInv_TileQuadrant UInv_InventoryGrid::CalculateTileQuadrant(const FVector2D& CanvasPosition,
+	const FVector2D& MousePosition)
+{
+	const float LocalTileX = FMath::Fmod(MousePosition.X - CanvasPosition.X, TileSize);
+	const float LocalTileY = FMath::Fmod(MousePosition.Y - CanvasPosition.Y, TileSize);
+
+	const bool bIsTop = LocalTileX < TileSize / 2.f;
+	const bool bIsLeft = LocalTileY < TileSize / 2.f;
+
+	EInv_TileQuadrant HoveredTileQuadrant{};
+	if (bIsTop && bIsLeft)  HoveredTileQuadrant = EInv_TileQuadrant::TopLeft;
+	if (bIsTop && !bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::TopRight;
+	if (!bIsTop && bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::BottomLeft;
+	if (!bIsTop && !bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::BottomRight;
+
+	return HoveredTileQuadrant;
+}
+
 
 
