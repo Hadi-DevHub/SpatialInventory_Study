@@ -74,6 +74,7 @@ private:
 	void AssignHoverItem(UInv_InventoryItem* Item, int32 GridIndex, int32 PreviousGridIndex);
 	void RemoveItemFromGrid(UInv_InventoryItem* Item, int32 GridIndex);
 	void UpdateTileParameters(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
+	FIntPoint CalculateHoveredDistance(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
 	
 
 	UFUNCTION()
@@ -116,5 +117,8 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UInv_HoverItem> HoverItem;
+
+	FInv_TileParameters TileParameters;
+	FInv_TileParameters LastTileParameters;
 
 };

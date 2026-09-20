@@ -449,7 +449,20 @@ void UInv_InventoryGrid::RemoveItemFromGrid(UInv_InventoryItem* Item, int32 Grid
 
 void UInv_InventoryGrid::UpdateTileParameters(const FVector2D& CanvasPosition, const FVector2D& MousePosition)
 {
-	//
+	// if mouse not in canvas, return
+	// calculate  the tile quadrant, tile coordinates, tile index
+
+	const FIntPoint HoveredTileCoordinates = CalculateHoveredDistance(CanvasPosition, MousePosition); 
+
+	LastTileParameters = TileParameters;
+	TileParameters.TileIndex = UWidgetUtils::GetIndexFromPosition(HoveredTileCoordinates, Columns);
+	TileParameters.TileCoordinates = HoveredTileCoordinates;
+	// handle highlight/unhighlight grid slots
+}
+
+FIntPoint UInv_InventoryGrid::CalculateHoveredDistance(const FVector2D& CanvasPosition, const FVector2D& MousePosition)
+{
+	return FIntPoint(FMath::FloorToInt32(MousePosition.X - CanvasPosition.X) / TileSize, FMath::FloorToInt32(MousePosition.Y - CanvasPosition.Y) / TileSize);
 }
 
 
