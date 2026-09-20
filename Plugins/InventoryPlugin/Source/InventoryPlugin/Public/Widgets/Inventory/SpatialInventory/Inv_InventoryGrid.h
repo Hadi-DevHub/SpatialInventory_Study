@@ -27,6 +27,7 @@ public:
 	EInv_ItemCategory GetCategoryType() const { return ItemCategory; }
 	
 	void NativeOnInitialized() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	UFUNCTION()
 	void AddItem(UInv_InventoryItem* Item);
@@ -72,6 +73,7 @@ private:
 	void AssignHoverItem(UInv_InventoryItem* Item);
 	void AssignHoverItem(UInv_InventoryItem* Item, int32 GridIndex, int32 PreviousGridIndex);
 	void RemoveItemFromGrid(UInv_InventoryItem* Item, int32 GridIndex);
+	void UpdateTileParameters(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
 	
 
 	UFUNCTION()
