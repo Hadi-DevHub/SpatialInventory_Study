@@ -76,6 +76,7 @@ private:
 	void UpdateTileParameters(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
 	FIntPoint CalculateHoveredDistance(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
 	EInv_TileQuadrant CalculateTileQuadrant(const FVector2D& CanvasPosition, const FVector2D& MousePosition);
+	void OnTileParametersUpdated(const FInv_TileParameters& TileParameters);
 	
 
 	UFUNCTION()

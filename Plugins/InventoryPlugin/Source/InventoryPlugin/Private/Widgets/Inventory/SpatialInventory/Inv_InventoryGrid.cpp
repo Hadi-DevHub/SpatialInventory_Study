@@ -457,8 +457,17 @@ void UInv_InventoryGrid::UpdateTileParameters(const FVector2D& CanvasPosition, c
 	LastTileParameters = TileParameters;
 	TileParameters.TileIndex = UWidgetUtils::GetIndexFromPosition(HoveredTileCoordinates, Columns);
 	TileParameters.TileCoordinates = HoveredTileCoordinates;
+	
 	// handle highlight/unhighlight grid slots
+	OnTileParametersUpdated(TileParameters);
 }
+
+
+void UInv_InventoryGrid::OnTileParametersUpdated(const FInv_TileParameters& TileParameters)
+{
+	FIntPoint Dimensions = HoverItem->GetGridDimensions();
+}
+
 
 FIntPoint UInv_InventoryGrid::CalculateHoveredDistance(const FVector2D& CanvasPosition, const FVector2D& MousePosition)
 {
@@ -474,7 +483,7 @@ EInv_TileQuadrant UInv_InventoryGrid::CalculateTileQuadrant(const FVector2D& Can
 	const bool bIsTop = LocalTileX < TileSize / 2.f;
 	const bool bIsLeft = LocalTileY < TileSize / 2.f;
 
-	EInv_TileQuadrant HoveredTileQuadrant{};
+	EInv_TileQuadrant HoveredTileQuadrant{EInv_TileQuadrant::None};
 	if (bIsTop && bIsLeft)  HoveredTileQuadrant = EInv_TileQuadrant::TopLeft;
 	if (bIsTop && !bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::TopRight;
 	if (!bIsTop && bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::BottomLeft;
